@@ -6,10 +6,11 @@ interface TaskInputProps {
     addTodo: (name: string) => void
     editTodo: (name: string) => void
     currentTodo: Todo | null
+    finishEditTodo: () => void
 }
 
 export default function TaskInput(props: TaskInputProps) {
-    const { addTodo, editTodo, currentTodo } = props
+    const { addTodo, editTodo, currentTodo, finishEditTodo } = props
     const [name, setName] = useState<string>('')
 
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,8 +21,14 @@ export default function TaskInput(props: TaskInputProps) {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        addTodo(name)
-        setName('')
+        if (currentTodo) {
+            finishEditTodo()
+
+            if (name) setName('')
+        } else {
+            addTodo(name)
+            setName('')
+        }
     }
 
     return (
